@@ -9,5 +9,6 @@ app_name="office-master"
 urlpatterns = [   
     url(r'^$',views.index,name='index'),
     url(r'^about$',views.about,name='about'),    
-    url(r'^topic$',views.topicPage,name='topic')   
+    url(r'^topic$',views.topicPage,name='topic') ,    
+    url(r'^web-page$',views.Web_Page,name='web-page')     
 ]
