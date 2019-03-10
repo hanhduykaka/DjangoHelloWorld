@@ -1,0 +1,13 @@
+﻿
+<5 staff => free
+> ---> fee ##
+
+Quản lý hoạt động nhân viên,học sinh , gamer
+quz
+
+multiple language
+multiple them :- Hieu truong, Giao vien, Hoc sinh
+ 		- Boss, Manager, staff
+		- Bang chu, Bang pho, gamer
+
+Thống kê: 
