@@ -22,7 +22,24 @@ class Clients(models.Model):
     username=models.CharField(max_length=200,unique=True)
     password=models.CharField(max_length=200) 
     def __str__(self):
-        return self.name
+        return self.username
 
     class Meta:
         db_table = u'Clients'
+class ClientsInformation(models.Model):
+    Teacher = 'teach'
+    Student = 'stu' 
+    ROLES_CHOICES = (
+        (Teacher, 'Teacher'),
+        (Student, 'Student')     
+    )
+    user=models.ForeignKey(Clients,on_delete=models.PROTECT)
+    roles=models.CharField(
+        max_length=2,
+        choices=ROLES_CHOICES,
+        default=Student
+    )
+    class Meta:
+        db_table = u'ClientsInformation'
+
+
