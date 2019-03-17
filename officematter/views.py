@@ -42,6 +42,8 @@ def register_view(request):
             profile.save()
             registered = True
             print("đã insert dư liệu")
+            result = "Chào bạn " + user.username
+            return render(request, "officematter/index.html", {"result":result})
         else:
             form_user.add_error('confirm','form không hợp lệ')
             print(form_user.errors, form_por.errors)
