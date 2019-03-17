@@ -3,11 +3,15 @@
 > ---> fee ##
 
 Quản lý hoạt động nhân viên,học sinh , gamer
-quz
 
 multiple language
 multiple them :- Hieu truong, Giao vien, Hoc sinh
  		- Boss, Manager, staff
 		- Bang chu, Bang pho, gamer
 
-Thống kê: 
+
+Quản lý học sinh trước : module quản lý bài nộp = hình ảnh
+Giáo viên chấm điểm đạt hay không đạt theo ngày
+
+Thống kê: Số sinh viên đạt, không đạt
+

@@ -11,5 +11,6 @@ urlpatterns = [
     url(r'^about$',views.about,name='about'),    
     url(r'^topic$',views.topicPage,name='topic') ,    
     url(r'^web-page$',views.Web_Page,name='web-page'),       
-    url(r'^register$',views.register_view,name='register')     
+    url(r'^register$',views.register_view,name='register'),       
+    url(r'^login$',views.login_view,name='login') 
 ]

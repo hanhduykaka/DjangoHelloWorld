@@ -1,8 +1,10 @@
 from django.shortcuts import render
 from officematter.models import Topic, WebPage
-from officematter.form import FormRegister
+from officematter.form import FormRegister,UserForm,UserProfileInfoForm
 from officematter.models import Clients
 from datetime import datetime
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
 # Create your views here.
 
 
@@ -25,24 +27,55 @@ def Web_Page(request):
     pagelist = WebPage.objects.all().order_by("name")
     return render(request, "officematter/webpage.html",context= {'pagelist':pagelist})
 
-def register_view(request):  
-    form = FormRegister()
-    create_date=datetime.now()
-    userName=''
+def register_view(request):
+    registered = False
     if request.method=='POST':
-        form=FormRegister(request.POST,Clients)
-        if form.is_valid() and form.cleaned_data['password'] == form.cleaned_data['confirm']:
+        form_user = UserForm(data=request.POST)
+        form_por = UserProfileInfoForm(data = request.POST)
+        if form_user.is_valid() and form_por.is_valid() and form_user.cleaned_data['password'] == form_user.cleaned_data['confirm']:
             request.POST._mutable = True
-            post = form.save(commit=False)
-            post.email=form.cleaned_data['email']
-            userName=form.cleaned_data['username']
-            post.username = userName
-            post.password = form.cleaned_data['password']
-            post.save() 
+            user = form_user.save()
+            user.set_password(user.password)
+            user.save()
+            profile = form_por.save(commit = False)
+            profile.user_auth = user            
+            profile.save()
+            registered = True
             print("đã insert dư liệu")
         else:
-            form.add_error('confirm','form không hợp lệ')
-            print('form không hợp lệ')
-    response= render(request, "officematter/register.html",{'form':form})
-    response.set_cookie('__django__.User',{"username":userName,"create_date":create_date.strftime('%d-%m-%Y %H:%M:%S')})
-    return response
+            form_user.add_error('confirm','form không hợp lệ')
+            print(form_user.errors, form_por.errors)
+    else:
+        form_user = UserForm()
+        form_por = UserProfileInfoForm() 
+        return render(request, "officematter/register.html", {'user_form':form_user,\
+ 'profile_form': form_por,
+ 'registered': registered})
+
+    # response= render(request, "officematter/register.html",{'form':form})
+    # response.set_cookie('__django__.User',{"username":userName,"create_date":create_date.strftime('%d-%m-%Y %H:%M:%S')})
+    # return response
+def login_view(request):
+    if request.method=='POST':        
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        user = authenticate(username=username, password = password)
+        if user:
+            if user.is_active:
+                login(request, user)
+                result = "Chào bạn " + username
+                return render(request, "officematter/index.html", {"result":result})
+            else:
+                print("Không đăng nhập được")
+                print("Username: {} and password: {}".format(username, password))
+                login_result = "Username và password không hợp lệ"
+                return render(request, "officematter/login.html",{"login_result", login_result})
+    else:
+        return render(request, "officematter/login.html")
+        # response= render(request, "officematter/register.html",{'form':form})
+        # response.set_cookie('__django__.User',{"username":userName,"create_date":create_date.strftime('%d-%m-%Y %H:%M:%S')})
+        # return response
+ 
+
+     
+
