@@ -12,5 +12,6 @@ urlpatterns = [
     url(r'^topic$',views.topicPage,name='topic') ,    
     url(r'^web-page$',views.Web_Page,name='web-page'),       
     url(r'^register$',views.register_view,name='register'),       
-    url(r'^login$',views.login_view,name='login') 
+    url(r'^login$',views.login_view,name='login') ,       
+    url(r'^logout$',views.user_logout,name='logout') 
 ]

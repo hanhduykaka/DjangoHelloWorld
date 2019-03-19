@@ -5,9 +5,10 @@ from officematter.models import Clients
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
+from django.http import HttpResponseRedirect
 # Create your views here.
 
-
+@login_required(login_url='/login')
 def index(request):
     return render(request, "officematter/index.html")
 
@@ -42,8 +43,12 @@ def register_view(request):
             profile.save()
             registered = True
             print("đã insert dư liệu")
-            result = "Chào bạn " + user.username
-            return render(request, "officematter/index.html", {"result":result})
+            username = request.POST['username']
+            password = request.POST['password']
+            #authenticate user then login
+            user_authenticate = authenticate(username=username, password=password)
+            login(request, user_authenticate)
+            return HttpResponseRedirect('/office-master/')
         else:
             form_user.add_error('confirm','form không hợp lệ')
             print(form_user.errors, form_por.errors)
@@ -64,19 +69,23 @@ def login_view(request):
         user = authenticate(username=username, password = password)
         if user:
             if user.is_active:
-                login(request, user)
-                result = "Chào bạn " + username
-                return render(request, "officematter/index.html", {"result":result})
+                login(request, user)                
+                return HttpResponseRedirect('/office-master/')
             else:
                 print("Không đăng nhập được")
                 print("Username: {} and password: {}".format(username, password))
                 login_result = "Username và password không hợp lệ"
                 return render(request, "officematter/login.html",{"login_result", login_result})
-    else:
-        return render(request, "officematter/login.html")
-        # response= render(request, "officematter/register.html",{'form':form})
-        # response.set_cookie('__django__.User',{"username":userName,"create_date":create_date.strftime('%d-%m-%Y %H:%M:%S')})
-        # return response
+   
+    return render(request, "officematter/login.html")
+
+@login_required
+def user_logout(request):
+     logout(request)
+     return HttpResponseRedirect('/office-master/login')
+
+
+
  
 
      
