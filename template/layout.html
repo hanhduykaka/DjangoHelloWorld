@@ -24,7 +24,7 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300">
-    <link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
+    <link href="http://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet" type="text/css">
     <link href="http://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/font-awesome.min.css' %}">
@@ -48,7 +48,7 @@
                     <span class="icon-bar"></span>
                 </button>
 
-                <a class="navbar-brand wow fadeInDownBig" href="index.html"><img class="office-logo" src="{% static 'assets/img/slider/Office.png' %}" alt="Office"></a>
+                <a class="navbar-brand wow fadeInDownBig" href="{% url 'office-master:index' %}"><img class="office-logo" src="{% static 'assets/img/slider/Office.png' %}" alt="Office"></a>
             </div>
 
             <div id="navbar-spy" class="collapse navbar-collapse navbar-responsive-collapse">
@@ -56,12 +56,16 @@
                     <li class="active">
                         <a href="{% url 'office-master:index' %}">Home</a>
                     </li>
-                    <li>
-                        <a href="{% url 'office-master:about' %}">About</a>
-                    </li>
+
                     {% if user.is_authenticated %}
                     <li>
+                        <a>
+                            Welcome  {{user.username}} !
+                       </a>
+                    </li>
+                    <li>
                         <a href="{% url 'office-master:logout' %}"><span>Logout</span></a>
+
                     </li>
                     {% else %}
                     <li>
@@ -118,7 +122,7 @@
 
 
     <div class="copyright text center">
-        <p>&copy; Copyright 2014, <a href="#">Your Website Link</a>. Theme by <a href="https://themewagon.com/" target="_blank">ThemeWagon</a></p>
+        <p>&copy; Copyright 2019, <a href="#">Your Website Link</a>. Theme by <a href="https://themewagon.com/" target="_blank">ThemeWagon</a></p>
     </div>
 
 

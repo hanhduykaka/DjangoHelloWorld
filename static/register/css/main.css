@@ -396,9 +396,11 @@ input {
 }
 
 .input--style-3 {
-    padding: 5px 0;
+    padding: 5px 5px;
     font-size: 16px;
-    color: #ccc;
+    color: darkmagenta !important;
+    border-radius: 3px;
+    font-weight: 600;
 }
 
 .input--style-3::-webkit-input-placeholder {
@@ -539,7 +541,7 @@ input {
 }
 
 .card-3 {
-    background: #000;
+    background: darkmagenta;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
     border-radius: 10px;
