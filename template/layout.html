@@ -53,10 +53,12 @@
 
             <div id="navbar-spy" class="collapse navbar-collapse navbar-responsive-collapse">
                 <ul class="nav navbar-nav pull-right">
-                    <li class="active">
+                    <li class="{% if request.resolver_match.url_name == 'index' %}active{% endif %}">
                         <a href="{% url 'office-master:index' %}">Home</a>
                     </li>
-
+                    <li class="{% if request.resolver_match.url_name == 'about' %}active{% endif %}">
+                        <a href="{% url 'office-master:about' %}">About</a>
+                    </li>
                     {% if user.is_authenticated %}
                     <li>
                         <a>
