@@ -52,6 +52,9 @@ def register_view(request):
         else:
             form_user.add_error('confirm','form không hợp lệ')
             print(form_user.errors, form_por.errors)
+            return render(request, "officematter/register.html", {'user_form':form_user,\
+                'profile_form': form_por,
+                'registered': registered})
     else:
         form_user = UserForm()
         form_por = UserProfileInfoForm() 
