@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User 
+# from ckeditor.fields import RichTextField
+# from ckeditor_uploader.fields import RichTextUploadingField 
 # Create your models here.
 
 
@@ -15,6 +17,12 @@ class WebPage(models.Model):
     name=models.CharField(max_length=200,unique=True)
     url=models.URLField(unique=True)
     image=models.ImageField(upload_to="images/")
+    def __str__(self):
+        return self.name
+class Contents(models.Model):
+    name=models.CharField(max_length=200,unique=True)
+    # content = RichTextUploadingField()
+   
     def __str__(self):
         return self.name
 class Clients(models.Model):
@@ -46,5 +54,17 @@ class ClientsInformation(models.Model):
         return self.user_auth.username
     class Meta:
         db_table = u'ClientsInformation'
+    
+# class Organization(models.Model):
+#     Code = models.CharField(max_length=200,unique=True)
+#     Manager = models.ForeignKey(User, on_delete=models.PROTECT)    
+  
+#     bio=models.CharField(max_length=200)
+
+
+#     def __str__(self):
+#         return self.user_auth.username
+#     class Meta:
+#         db_table = u'ClientsInformation'
 
 

@@ -13,5 +13,8 @@ urlpatterns = [
     url(r'^web-page$',views.Web_Page,name='web-page'),       
     url(r'^register$',views.register_view,name='register'),       
     url(r'^login$',views.login_view,name='login') ,       
-    url(r'^logout$',views.user_logout,name='logout') 
+    url(r'^logout$',views.user_logout,name='logout'),        
+    url(r'^api/v1/users$',views.get_list_users,name='api/v1/users'), 
+    url(r'^users$',views.User_views,name='users') 
+
 ]

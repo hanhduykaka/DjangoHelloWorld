@@ -1,11 +1,12 @@
 from django.shortcuts import render
 from officematter.models import Topic, WebPage
 from officematter.form import FormRegister,UserForm,UserProfileInfoForm
-from officematter.models import Clients
+from officematter.models import Clients,User
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
+import json, urllib
 # Create your views here.
 
 @login_required(login_url='/login')
@@ -82,10 +83,28 @@ def login_view(request):
    
     return render(request, "officematter/login.html")
 
+def get_list_users(request):
+    userObjects = User.objects.order_by('username')    
+    lstUser = list(userObjects.values('username','email'))
+    return HttpResponse(json.dumps(lstUser,ensure_ascii=False).encode('utf8'))
+
 @login_required
 def user_logout(request):
      logout(request)
      return HttpResponseRedirect('/office-master/login')
+
+
+def User_views(request):
+    url="http://127.0.0.1:8000/api/v1/users"
+    default_encoding='utf-8'
+    url_response = urllib.request.urlopen(url)
+
+    if hasattr(url_response.headers,'get_content_charset'):
+        encoding= url_response.headers.get_content_charset(default_encoding)
+    else:
+        encoding=url_response.headers.getparam('charset') or default_encoding
+    data = json.loads(url_response.read().decode(encoding))
+    return HttpResponse(data)
 
 
 

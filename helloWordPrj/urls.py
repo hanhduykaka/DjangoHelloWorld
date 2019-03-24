@@ -18,10 +18,13 @@ from django.urls import path
 from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.conf import settings
-
+from django.contrib.staticfiles import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^',include('officematter.urls')),
-    path('office-master/', include('officematter.urls'))
+    path('office-master/', include('officematter.urls')),
+    # path('^ckeditor/', include('ckeditor_uploader.urls')),
+    # path('^static/(?P<path>.*)', include('ckeditor_uploader.urls')),
+
 ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
