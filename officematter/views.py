@@ -1,12 +1,16 @@
 from django.shortcuts import render
 from officematter.models import Topic, WebPage
-from officematter.form import FormRegister,UserForm,UserProfileInfoForm
+from officematter.form import FormRegister,UserForm,UserProfileInfoForm,TopicsForm
 from officematter.models import Clients,User
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 import json, urllib
+from .serialize import TopicSerializer
+from rest_framework.renderers import JSONRenderer
+from rest_framework.parsers import JSONParser
+from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 
 @login_required(login_url='/login')
@@ -24,6 +28,20 @@ def about(request):
 def topicPage(request):
     topiclist = Topic.objects.all().order_by("top_name")
     return render(request, "officematter/topic.html",context= {'topic':topiclist})
+
+
+def topicPageGetFromAPI_V2(request):
+    url="http://127.0.0.1:8000/api/v2/topics"
+    default_encoding='utf-8'
+    url_response = urllib.request.urlopen(url)
+
+    if hasattr(url_response.headers,'get_content_charset'):
+        encoding= url_response.headers.get_content_charset(default_encoding)
+    else:
+        encoding=url_response.headers.getparam('charset') or default_encoding
+    data = json.loads(url_response.read().decode(encoding))   
+    print(data)
+    return render(request, "officematter/topic.html",context= {'topic':data})
 
 def Web_Page(request):
     pagelist = WebPage.objects.all().order_by("name")
@@ -105,6 +123,41 @@ def User_views(request):
         encoding=url_response.headers.getparam('charset') or default_encoding
     data = json.loads(url_response.read().decode(encoding))
     return HttpResponse(data)
+
+@csrf_exempt
+def restAPI_Topics(request):
+    if request.method =="GET":
+        _topic = Topic.objects.all()
+        serializer= TopicSerializer(_topic,many=True)
+        return JsonResponse(serializer.data,safe=False)
+    elif request.method =="POST":
+        data = JSONParser().parse(request)
+        serializer= TopicSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data,status=201)
+        return JsonResponse(serializer.errors,status=400)
+
+
+def topic_create_view(request):    
+    if request.method=='POST':
+        form_topic = TopicsForm(data=request.POST)   
+        top_name = request.POST['top_name']     
+        if form_topic.is_valid():
+            request.POST._mutable = True
+            topic = form_topic.save()            
+            topic.save()
+            print("đã insert dư liệu")            
+            return HttpResponseRedirect('/topic-from-api')      
+        else:
+            return render(request, "officematter/topic_create.html", {'form_topic':form_topic})
+    else:
+        form_topic = TopicsForm()        
+        return render(request, "officematter/topic_create.html", {'form_topic':form_topic})
+ 
+
+
+
 
 
 

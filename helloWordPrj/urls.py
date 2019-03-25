@@ -19,11 +19,12 @@ from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib.staticfiles import views
+from officematter import views as officematter_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^',include('officematter.urls')),
-    path('office-master/', include('officematter.urls')),
+     path('office-master/', include('officematter.urls')),
     # path('^ckeditor/', include('ckeditor_uploader.urls')),
     # path('^static/(?P<path>.*)', include('ckeditor_uploader.urls')),
 

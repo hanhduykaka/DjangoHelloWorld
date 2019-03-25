@@ -12,15 +12,26 @@
 </head>
 
 <body>
-    {% if topic %}
-    <ul class="list-group">
-        {% for item in topic %}
-        <li class="list-group-item">{{item.top_name}}</li>
-        {% endfor%}
-    </ul>
-    {% endif %}
+    <form method="POST">
+        {% for field in form_topic %}
+        <div class="input-group">
+            {{ field }}
+        </div>
+        {% endfor %} {% csrf_token %} {% if form_topic.errors %} {% for field in form_topic %} {% for error in field.errors %}
+        <div class="alert alert-danger">
+            <strong>{{ error|escape }}</strong>
+        </div>
+        {% endfor %} {% endfor %} {% for error in form_topic.non_field_errors %}
+        <div class="alert alert-danger">
+            <strong>{{ error|escape }}</strong>
+        </div>
+        {% endfor %} {% endif %}
 
-    <a href="{% url 'office-master:topic-create' %}">Created Topic</a>
+
+        <div class="p-t-10">
+            <button class="btn btn--pill btn--green" type="submit">Submit</button>
+        </div>
+    </form>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
