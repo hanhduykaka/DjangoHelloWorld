@@ -54,17 +54,43 @@ class ClientsInformation(models.Model):
         return self.user_auth.username
     class Meta:
         db_table = u'ClientsInformation'
+
+class Type(models.Model):
+    Name=models.CharField(max_length=200,unique=True) 
+
+    def __str__(self):
+        return self.Name
+    class Meta:
+        db_table = u'Type'
+        
+class Organization(models.Model):  
+    Name = models.CharField(max_length=200,unique=True)  
+    Manager = models.ForeignKey(User, on_delete=models.PROTECT)
+    Type = models.ForeignKey(Type, on_delete=models.PROTECT)
+    IsPublic= models.BooleanField()
+    Purpose = models.CharField(max_length=200)
+    def __str__(self):
+        return self.Name
+    class Meta:
+        db_table = u'Organization'
+
+class OrganizationMember(models.Model):    
+    ClientId = models.ForeignKey(User, on_delete=models.PROTECT)
+    OrgId = models.ForeignKey(Organization, on_delete=models.PROTECT)   
+
+    class Meta:
+        db_table = u'OrganizationMember'
+
+class Achievement(models.Model):
+    Achievement = models.ImageField(upload_to="images/")
+    Success = models.BooleanField()
+    Date= models.DateField()
+    ClientId = models.ForeignKey(User, on_delete=models.PROTECT)
+    OrgId = models.ForeignKey(Organization, on_delete=models.PROTECT)
+
+    class Meta:
+        db_table = u'Achievement'
+
+
+
     
-# class Organization(models.Model):
-#     Code = models.CharField(max_length=200,unique=True)
-#     Manager = models.ForeignKey(User, on_delete=models.PROTECT)    
-  
-#     bio=models.CharField(max_length=200)
-
-
-#     def __str__(self):
-#         return self.user_auth.username
-#     class Meta:
-#         db_table = u'ClientsInformation'
-
-

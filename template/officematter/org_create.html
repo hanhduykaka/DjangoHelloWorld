@@ -1,0 +1,28 @@
+{% extends 'layout.html' %} {% load static %} {% block title%} Organization List {%endblock%} {% block body%}
+<div class="container org-form">
+
+    <div class="col-md-12">
+        <form method="POST">
+            {% for field in form_org %}
+            <div class="input-group">
+                {{ field }}
+            </div>
+            {% endfor %} {% csrf_token %} {% if form_org.errors %} {% for field in form_org %} {% for error in field.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+            {% endfor %} {% endfor %} {% for error in form_org.non_field_errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+            {% endfor %} {% endif %}
+
+
+            <div class="p-t-10">
+                <button class="btn btn--pill btn--green" type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

@@ -19,5 +19,9 @@ urlpatterns = [
     url(r'^api/v2/topics$',views.restAPI_Topics,name='api/v2/topics'), 
     url(r'^users$',views.User_views,name='users'),
     url(r'^topic-create$',views.topic_create_view,name='topic-create'),
+    url(r'^api/v2/organizations$',views.restAPI_Organizations,name='api/v2/organizations'), 
+    url(r'^organization-list$',views.org_lists,name='organization-list'),
+    url(r'^organization-create$',views.org_create_view,name='organization-create'),
 
+    
 ]

@@ -1,5 +1,5 @@
 from django import forms
-from officematter.models import Clients,ClientsInformation,Topic
+from officematter.models import Clients,ClientsInformation,Topic,Organization,OrganizationMember,Achievement,Type
 from django.contrib.auth.models import User
 from django.utils.text import slugify
 from django.core.exceptions import ValidationError
@@ -39,4 +39,11 @@ class TopicsForm(forms.ModelForm):
         model = Topic
         fields = ('top_name',)
 
-  
+class OrganizationForm(forms.ModelForm):
+    Name = forms.CharField(max_length=200,widget = forms.TextInput(attrs={'class': "input--style-3", 'placeholder':"Name"}))
+    Type = forms.ModelChoiceField(queryset=Type.objects.all())
+    IsPublic= forms.BooleanField()
+    Purpose = forms.CharField(max_length=200,widget = forms.TextInput(attrs={'class': "input--style-3", 'placeholder':"Purpose"}))
+    class Meta():
+        model = Organization
+        fields = ('Name', 'Type', 'IsPublic','Purpose','Manager')

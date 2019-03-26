@@ -1,0 +1,26 @@
+{% extends 'layout.html' %} {% load static %} {% block title%} Organization List {%endblock%} {% block body%}
+
+
+<div class="container org-form">
+    {% if org_lists %}
+    <div class="col-md-12">
+        <ul class="list-group">
+            {% for item in org_lists %}
+            <li class="list-group-item">
+                <label>Organization Name: </label>
+                <span>
+                    {{item.Name}}
+                </span>
+                <label>Owner: </label>
+                <span>
+                    {{item.Manager.username}}
+                </span>
+            </li>
+            {% endfor%}
+        </ul>
+    </div>
+    {% endif %}
+
+    <a href="{% url 'office-master:organization-create' %}">Created Organization</a>
+</div>
+{% endblock %}

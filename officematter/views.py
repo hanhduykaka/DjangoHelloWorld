@@ -1,13 +1,13 @@
 from django.shortcuts import render
-from officematter.models import Topic, WebPage
-from officematter.form import FormRegister,UserForm,UserProfileInfoForm,TopicsForm
+from officematter.models import Topic, WebPage,Organization,Type
+from officematter.form import FormRegister,UserForm,UserProfileInfoForm,TopicsForm,OrganizationForm
 from officematter.models import Clients,User
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 import json, urllib
-from .serialize import TopicSerializer
+from .serialize import TopicSerializer,OrganizationSerializer,UserSerializer,TypeSerializer
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from django.views.decorators.csrf import csrf_exempt
@@ -141,8 +141,7 @@ def restAPI_Topics(request):
 
 def topic_create_view(request):    
     if request.method=='POST':
-        form_topic = TopicsForm(data=request.POST)   
-        top_name = request.POST['top_name']     
+        form_topic = TopicsForm(data=request.POST)
         if form_topic.is_valid():
             request.POST._mutable = True
             topic = form_topic.save()            
@@ -154,8 +153,51 @@ def topic_create_view(request):
     else:
         form_topic = TopicsForm()        
         return render(request, "officematter/topic_create.html", {'form_topic':form_topic})
- 
 
+
+
+# api create && get all Organization
+@csrf_exempt
+def restAPI_Organizations(request):
+    if request.method =="GET":
+        _org = Organization.objects.all()
+        serializer= OrganizationSerializer(_org,many=True)
+        return JsonResponse(serializer.data,safe=False)
+    elif request.method =="POST":
+        data = JSONParser().parse(request)
+        serializer= OrganizationSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data,status=201)
+        return JsonResponse(serializer.errors,status=400)
+
+def org_create_view(request):    
+    if request.method=='POST':
+        form_org = OrganizationForm(data=request.POST)
+        if form_org.is_valid():
+            request.POST._mutable = True
+            org = form_org.save()            
+            org.save()
+            print("đã insert dư liệu")            
+            return HttpResponseRedirect('/organization-list')      
+        else:
+            return render(request, "officematter/org_create.html", {'form_org':form_org})
+    else:
+        form_org = OrganizationForm()        
+        return render(request, "officematter/org_create.html", {'form_org':form_org})
+ 
+def org_lists(request):
+    url="http://127.0.0.1:8000/api/v2/organizations"
+    default_encoding='utf-8'
+    url_response = urllib.request.urlopen(url)
+
+    if hasattr(url_response.headers,'get_content_charset'):
+        encoding= url_response.headers.get_content_charset(default_encoding)
+    else:
+        encoding=url_response.headers.getparam('charset') or default_encoding
+    data = json.loads(url_response.read().decode(encoding))   
+    print(data)
+    return render(request, "officematter/org_lists.html",context= {'org_lists':data})
 
 
 
