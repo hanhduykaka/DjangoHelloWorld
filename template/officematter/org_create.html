@@ -1,13 +1,50 @@
-{% extends 'layout.html' %} {% load static %} {% block title%} Organization List {%endblock%} {% block body%}
+ {% extends 'layout.html' %} {% load static %} {% block title%} Organization List {%endblock%} {% block body%}
 <div class="container org-form">
-
     <div class="col-md-12">
-        <form method="POST">
-            {% for field in form_org %}
-            <div class="input-group">
-                {{ field }}
+        <form method="POST" enctype="multipart/form-data" runat="server" class="form-control org-form">
+            {% if form_org %}
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="{{form_org.Name.id_for_label}}"> Organiztion
+                        Name: </label> {{ form_org.Name }}
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="{{form_org.Type.id_for_label}}"> Type: </label> {{ form_org.Type }}
+                </div>
             </div>
-            {% endfor %} {% csrf_token %} {% if form_org.errors %} {% for field in form_org %} {% for error in field.errors %}
+            <div class="form-row">
+                {% if user.is_superuser %}
+                <div class="form-group col-md-6">
+                    <label class="form-check-label" for="{{form_org.Purpose.id_for_label}}"> Purpose:
+                    </label> {{ form_org.Purpose }}
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="{{form_org.Manager.id_for_label}}"> Manager:
+                    </label> {{ form_org.Manager }}
+                </div>
+                {% else %}
+                <div class="form-group col-md-12">
+                    <label class="form-check-label" for="{{form_org.Purpose.id_for_label}}"> Purpose:
+                    </label> {{ form_org.Purpose }}
+                </div>
+                {% endif %}
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label class="form-check-label" for="{{form_org.Image.id_for_label}}"> Logo:
+                        </label> {{ form_org.Image }}
+                </div>
+                <div class="form-group col-md-6">
+                    <div id="preview_image" style="display: none ;width: 35px; height: 35px;"></div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label class="form-check-label" for="{{form_org.IsPublic.id_for_label}}"> IsPublic:
+                    </label> {{ form_org.IsPublic }}
+                </div>
+            </div>
+            {% csrf_token %} {% if form_org.errors %} {% for field in form_org %} {% for error in field.errors %}
             <div class="alert alert-danger">
                 <strong>{{ error|escape }}</strong>
             </div>
@@ -15,14 +52,16 @@
             <div class="alert alert-danger">
                 <strong>{{ error|escape }}</strong>
             </div>
-            {% endfor %} {% endif %}
-
-
-            <div class="p-t-10">
-                <button class="btn btn--pill btn--green" type="submit">Submit</button>
+            {% endfor %} {% endif %} {% endif %}
+            <div class="clearfix"></div>
+            <div class="p-t-10 text-center">
+                <button class="btn btn-primary text-center" type="submit">Submit</button>
             </div>
         </form>
     </div>
 </div>
 
+
+{% endblock %} {% block scripts %}
+<script src="{% static 'js/org.js' %}"></script>
 {% endblock %}

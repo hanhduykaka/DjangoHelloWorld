@@ -742,7 +742,7 @@ footer h3 {
     width: 100px;
     min-height: 50px;
     margin-right: 22px;
-    text-align: center!important;
+    text-align: center !important;
     background-color: #E6E6E6;
     padding: 20px 0
 }
@@ -877,5 +877,37 @@ footer h3 {
     }
     .carousel-caption .carousel-title {
         font-size: 14px;
+    }
+}
+
+.form-control.org-form {
+    height: 60vh;
+}
+
+@media (min-width: 1069px) {
+    .form-control.org-form {
+        margin-top: 5px;
+        min-height: 450px;
+    }
+}
+
+@media (max-width: 1068px) and (min-width: 992px) {
+    .form-control.org-form {
+        margin-top: 126px;
+        min-height: 450px;
+    }
+}
+
+@media (max-width: 991px) and (min-width: 769px) {
+    .form-control.org-form {
+        margin-top: 126px;
+        min-height: 800px;
+    }
+}
+
+@media (max-width: 768px) {
+    .form-control.org-form {
+        margin-top: 50px;
+        min-height: 800px;
     }
 }

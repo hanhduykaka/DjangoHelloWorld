@@ -40,10 +40,16 @@ class TopicsForm(forms.ModelForm):
         fields = ('top_name',)
 
 class OrganizationForm(forms.ModelForm):
-    Name = forms.CharField(max_length=200,widget = forms.TextInput(attrs={'class': "input--style-3", 'placeholder':"Name"}))
-    Type = forms.ModelChoiceField(queryset=Type.objects.all())
-    IsPublic= forms.BooleanField()
-    Purpose = forms.CharField(max_length=200,widget = forms.TextInput(attrs={'class': "input--style-3", 'placeholder':"Purpose"}))
+    Name = forms.CharField(max_length=200,label="Name",widget = forms.TextInput(attrs={'class': "form-control", 'placeholder':"Name"}))
+    Type = forms.ModelChoiceField(queryset=Type.objects.all(),widget = forms.Select(attrs={'class': "form-control"}))
+    IsPublic= forms.BooleanField(widget = forms.CheckboxInput(attrs={'class': "form-check-input"}))
+    Purpose = forms.CharField(max_length=200,widget = forms.TextInput(attrs={'class': "form-control", 'placeholder':"Purpose"}))
+    Image = forms.ImageField()
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['Name'].label = "Organization Name"
+        self.fields['Manager'].widget.attrs['class'] = 'form-control'
     class Meta():
         model = Organization
-        fields = ('Name', 'Type', 'IsPublic','Purpose','Manager')
+        fields = ('Name', 'Type', 'IsPublic','Purpose','Manager','Image')

@@ -69,6 +69,7 @@ class Organization(models.Model):
     Type = models.ForeignKey(Type, on_delete=models.PROTECT)
     IsPublic= models.BooleanField()
     Purpose = models.CharField(max_length=200)
+    Image=models.ImageField(upload_to="images/")
     def __str__(self):
         return self.Name
     class Meta:
