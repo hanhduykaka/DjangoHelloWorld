@@ -1,6 +1,6 @@
 
 from django.contrib import admin
-# from django.urls import path
+from django.urls import path
 from django.conf.urls import url
 
 from officematter import views 
@@ -19,9 +19,10 @@ urlpatterns = [
     url(r'^api/v2/topics$',views.restAPI_Topics,name='api/v2/topics'), 
     url(r'^users$',views.User_views,name='users'),
     url(r'^topic-create$',views.topic_create_view,name='topic-create'),
-    url(r'^api/v2/organizations$',views.restAPI_Organizations,name='api/v2/organizations'), 
+    url(r'^api/v2/organizations$',views.restAPI_Organizations,name='api/v2/organizations'),
+    url(r'^api/v2/organization/(?P<pk>\d+)/$',views.restAPI_Organization_Details,name="api/v2/organization-detail"),  
     url(r'^organization-list$',views.org_lists,name='organization-list'),
     url(r'^organization-create$',views.org_create_view,name='organization-create'),
-
+    url(r'^organization/(?P<pk>\d+)/$',views.org_detail_view,name='organization-detail'),
     
 ]

@@ -11,6 +11,7 @@ from .serialize import TopicSerializer,OrganizationSerializer,UserSerializer,Typ
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import get_list_or_404, get_object_or_404
 # Create your views here.
 
 @login_required(login_url='/login')
@@ -171,9 +172,34 @@ def restAPI_Organizations(request):
             return JsonResponse(serializer.data,status=201)
         return JsonResponse(serializer.errors,status=400)
 
+
+@csrf_exempt
+def restAPI_Organization_Details(request,pk):
+    try:        
+        _org = Organization.objects.get(pk=pk)
+    except _org.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method =="GET":       
+        serializer= OrganizationSerializer(_org)
+        return JsonResponse(serializer.data)
+
+    elif request.method =="PUT":
+        data = JSONParser().parse(request)
+        serializer= OrganizationSerializer(_org,data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data,status=200)
+        return JsonResponse(serializer.errors,status=400)
+
+    elif request.method =="DELETE":
+        _org.delete()      
+        return JsonResponse(serializer.data,status=200)
+
+
 def org_create_view(request):    
     if request.method=='POST':
-        form_org = OrganizationForm(data=request.POST)
+        form_org = OrganizationForm(request.POST,request.FILES)
         if form_org.is_valid():
             request.POST._mutable = True
             org = form_org.save()            
@@ -200,7 +226,23 @@ def org_lists(request):
     return render(request, "officematter/org_lists.html",context= {'org_lists':data})
 
 
+def org_detail_view(request,pk=None):
+    print(pk)
+    url="http://127.0.0.1:8000/api/v2/organization/"+ pk + "/"
+    print(url)
+    default_encoding='utf-8'
+    url_response = urllib.request.urlopen(url)
 
+    if hasattr(url_response.headers,'get_content_charset'):
+        encoding= url_response.headers.get_content_charset(default_encoding)
+    else:
+        encoding=url_response.headers.getparam('charset') or default_encoding
+    data = json.loads(url_response.read().decode(encoding))   
+    if request.method=="POST":
+        form= OrganizationForm(request.POST,request.FILES)
+
+    return render(request, "officematter/org_create.html", {'form_org':data})
+    
 
 
  

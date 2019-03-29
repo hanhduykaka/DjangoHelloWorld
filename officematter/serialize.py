@@ -37,7 +37,7 @@ class TypeSerializer(serializers.ModelSerializer):
 class OrganizationSerializer(serializers.ModelSerializer):  
     class Meta:
         model=Organization
-        fields=('id','Name','Manager','Type','IsPublic','Purpose',)
+        fields=('id','Name','Manager','Type','IsPublic','Purpose','Image',)
         read_only_fields = ('id',)
 
     def to_representation(self, instance):

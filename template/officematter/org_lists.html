@@ -8,13 +8,18 @@
             {% for item in org_lists %}
             <li class="list-group-item">
                 <label>Organization Name: </label>
-                <span>
-                    {{item.Name}}
-                </span>
+                <a href="{%url 'office-master:organization-detail' item.id %}">
+                    <span>
+                        {{item.Name}}
+                    </span>
+                </a>
                 <label>Owner: </label>
                 <span>
                     {{item.Manager.username}}
                 </span>
+
+
+
             </li>
             {% endfor%}
         </ul>
