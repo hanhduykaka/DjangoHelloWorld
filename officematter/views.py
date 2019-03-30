@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from officematter.models import Topic, WebPage, Organization, Type
-from officematter.form import FormRegister, UserForm, UserProfileInfoForm, TopicsForm, OrganizationForm
+from officematter.models import Topic, WebPage, Organization, Type ,OrganizationMember
+from officematter.form import FormRegister, UserForm, UserProfileInfoForm, TopicsForm, OrganizationForm,OrganizationMemberForm
 from officematter.models import Clients, User
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
@@ -28,13 +28,19 @@ def index(request):
     else:
         encoding = url_response.headers.getparam('charset') or default_encoding
     data = json.loads(url_response.read().decode(encoding))  
+    org_member= OrganizationMember.objects.filter(ClientId=request.user.pk)
+
+    org_list = list(org_member.values('OrgId'))
+    
     if request.user.is_superuser:
         data=data
     else:
-        data=[d for d in data if(d['IsPublic'] == True)]
-    return render(request, "officematter/index.html",context={'org_lists': data})
+        data=[d for d in data if(d['IsPublic'] == True or d['Manager']['username']==request.user.username or d['id'] in org_list ) ]
+    
+    
+    return render(request, "officematter/index.html",context={'org_lists': data,'org_member':org_member})
 
-
+@login_required(login_url='/login')
 def about(request):
     userCookie = ''
     if '__django__.User' in request.COOKIES:
@@ -284,3 +290,21 @@ def org_delete(request, pk, template_name='officematter/org_confirm_delete.html'
         org.delete()
         return HttpResponseRedirect('/organization-list')
     return render(request, template_name, {'object':org})
+
+@login_required(login_url='/login')       
+def org_add_member(request, pk, template_name='officematter/org_add_member.html'):
+    org= get_object_or_404(Organization, pk=pk)    
+    if request.method == "POST":
+        form = OrganizationMemberForm(request.POST or None)
+        if form.is_valid():
+            org_member=  form.save(commit=False)
+            org_member.OrgId = org
+            org_member.save()
+            return HttpResponseRedirect('/organization-list')
+        else:
+            return render(request, template_name, {'form_org': form})
+    else:
+        form = OrganizationMemberForm()     
+        return render(request, template_name, {'form_org': form})
+
+

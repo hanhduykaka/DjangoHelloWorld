@@ -1,0 +1,32 @@
+ {% extends 'layout.html' %} {% load static %} {% block title%} Organization Add Member {%endblock%} {% block body%}
+<div class="container org-form">
+    <div class="col-md-12">
+        <form method="POST" enctype="multipart/form-data" runat="server" class="form-control org-form">
+            {% if form_org %}
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="{{form_org.ClientId.id_for_label}}"> Organiztion
+                        Member: </label> {{ form_org.ClientId }}
+                </div>
+            </div>
+            {% csrf_token %} {% if form_org.errors %} {% for field in form_org %} {% for error in field.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+            {% endfor %} {% endfor %} {% for error in form_org.non_field_errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+            {% endfor %} {% endif %} {% endif %}
+            <div class="clearfix"></div>
+            <div class="p-t-10 text-center">
+                <button class="btn btn-primary text-center" type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+{% endblock %} {% block scripts %}
+<script src="{% static 'js/org.js' %}"></script>
+{% endblock %}

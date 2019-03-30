@@ -26,5 +26,5 @@ urlpatterns = [
     url(r'^organization/(?P<pk>\d+)/$',views.org_detail_edit,name='organization-edit'),
     path('organization-detail/<int:pk>', views.org_detail_view, name='organization-detail'),
     path('organization-delete/<int:pk>', views.org_delete, name='organization-delete'),
-    
+    path('organization-add-member/<int:pk>', views.org_add_member, name='organization-add-member'),
 ]

@@ -24,8 +24,8 @@
                     {{item.Manager.username}}
                 </span>
                 <a href="{%url 'office-master:organization-detail' item.id %}">View</a> {% if item.Manager.username == user.username or user.is_superuser %}
-                <a href="{%url 'office-master:organization-delete' item.id %}">Delete</a> {% endif %}
-
+                <a href="{%url 'office-master:organization-delete' item.id %}">Delete</a> {% endif %} {% if item.Manager.username == user.username or user.is_superuser %}
+                <a href="{%url 'office-master:organization-add-member' item.id %}">Add member</a> {% endif %}
 
             </li>
             {% endfor%}
