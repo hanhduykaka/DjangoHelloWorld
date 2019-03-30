@@ -29,16 +29,13 @@ def index(request):
         encoding = url_response.headers.getparam('charset') or default_encoding
     data = json.loads(url_response.read().decode(encoding))  
     org_member= OrganizationMember.objects.filter(ClientId=request.user.pk)
-
     org_list = list(org_member.values('OrgId'))
-    
+    ore_list_string =', '.join(str(d['OrgId']) for d in org_list)
     if request.user.is_superuser:
         data=data
     else:
-        data=[d for d in data if(d['IsPublic'] == True or d['Manager']['username']==request.user.username or d['id'] in org_list ) ]
-    
-    
-    return render(request, "officematter/index.html",context={'org_lists': data,'org_member':org_member})
+        data=[d for d in data if( (d['IsPublic'] == True or d['Manager']['username']==request.user.username or str(d['id']) in ore_list_string) ) ]
+    return render(request, "officematter/index.html",context={'org_lists': data,'org_member':org_list})
 
 @login_required(login_url='/login')
 def about(request):
