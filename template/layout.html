@@ -62,6 +62,9 @@
                     <li class="{% if request.resolver_match.url_name == 'about' %}active{% endif %}">
                         <a href="{% url 'office-master:about' %}">About</a>
                     </li>
+                    <li class="{% if request.resolver_match.url_name == 'organization-list' %}active{% endif %}">
+                        <a href="{% url 'office-master:organization-list' %}">Orgnazation</a>
+                    </li>
                     {% if user.is_authenticated %}
                     <li>
                         <a>

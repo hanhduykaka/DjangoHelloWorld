@@ -537,7 +537,7 @@ p.blog-text {
 
 .services-group {
     padding: 10px;
-    background: #061F20;
+    background: #036063;
     color: white;
 }
 
@@ -910,4 +910,17 @@ footer h3 {
         margin-top: 50px;
         min-height: 800px;
     }
+}
+
+.services-row-1 {
+    margin-bottom: 5px;
+}
+
+.services-group p,
+.services-group h4 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

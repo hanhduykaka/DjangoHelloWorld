@@ -7,17 +7,24 @@
         <ul class="list-group">
             {% for item in org_lists %}
             <li class="list-group-item">
-                <label>Organization Name: </label>
-                <a href="{%url 'office-master:organization-detail' item.id %}">
+                <label>Organization Name: </label> {% if item.Manager.username == user.username or user.is_superuser %}
+                <a href="{%url 'office-master:organization-edit' item.id %}">
                     <span>
                         {{item.Name}}
                     </span>
                 </a>
+                {% else %}
+                <span>
+                        {{item.Name}}
+                </span> {% endif %}
+
+
                 <label>Owner: </label>
                 <span>
                     {{item.Manager.username}}
                 </span>
-
+                <a href="{%url 'office-master:organization-detail' item.id %}">View</a> {% if item.Manager.username == user.username or user.is_superuser %}
+                <a href="{%url 'office-master:organization-delete' item.id %}">Delete</a> {% endif %}
 
 
             </li>

@@ -23,6 +23,8 @@ urlpatterns = [
     url(r'^api/v2/organization/(?P<pk>\d+)/$',views.restAPI_Organization_Details,name="api/v2/organization-detail"),  
     url(r'^organization-list$',views.org_lists,name='organization-list'),
     url(r'^organization-create$',views.org_create_view,name='organization-create'),
-    url(r'^organization/(?P<pk>\d+)/$',views.org_detail_view,name='organization-detail'),
+    url(r'^organization/(?P<pk>\d+)/$',views.org_detail_edit,name='organization-edit'),
+    path('organization-detail/<int:pk>', views.org_detail_view, name='organization-detail'),
+    path('organization-delete/<int:pk>', views.org_delete, name='organization-delete'),
     
 ]

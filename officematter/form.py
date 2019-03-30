@@ -50,6 +50,10 @@ class OrganizationForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['Name'].label = "Organization Name"
         self.fields['Manager'].widget.attrs['class'] = 'form-control'
+        self.fields['IsPublic'].required = False
+        self.fields['Image'].required = False
+        self.fields['Manager'].required = False
+
     class Meta():
         model = Organization
         fields = ('Name', 'Type', 'IsPublic','Purpose','Manager','Image')

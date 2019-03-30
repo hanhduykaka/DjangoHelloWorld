@@ -1,0 +1,13 @@
+{% extends 'layout.html' %} {% load static %} {% block title%} Organization List {%endblock%} {% block body%}
+
+
+<div class="container org-form">
+
+    <h2><a href="{% url 'office-master:organization-list' %}">Organization List</a>: Delete?</h2>
+
+    <form method="post">{% csrf_token %} Are you sure you want to delete "{{ object }}" ?<br/>
+        <input type="submit" value="Delete" />
+    </form>
+
+</div>
+{% endblock %}
