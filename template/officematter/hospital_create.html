@@ -1,0 +1,49 @@
+ {% extends 'layout.html' %} {% load static %} {% block title%} Hospital form {%endblock%} {% block body%}
+<div class="container org-form">
+    <div class="col-md-12">
+        <form method="POST" enctype="multipart/form-data" runat="server" class="form-control org-form">
+            {% if form %}
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="{{form.Name.id_for_label}}"> Hosptal
+                         Name: </label> {{ form.Name }}
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="{{form.Code.id_for_label}}"> Code: </label> {{ form.Code }}
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="{{form.NumberDoctor.id_for_label}}"> NumberDoctor
+                         : </label> {{ form.NumberDoctor }}
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="{{form.NumberNurser.id_for_label}}"> NumberNurser: </label> {{ form.NumberNurser }}
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="{{form.NumberStaff.id_for_label}}"> NumberStaff
+                             : </label> {{ form.NumberStaff }}
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="{{form.NumberPatientInMonth.id_for_label}}"> NumberPatientInMonth: </label> {{ form.NumberPatientInMonth }}
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="{{form.Address.id_for_label}}"> Address: </label> {{ form.Address }}
+                </div>
+            </div>
+            {% csrf_token %} {% endif %}
+            <div class="clearfix"></div>
+            <div class="p-t-10 text-center">
+                <button class="btn btn-primary text-center" type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+{% endblock %} {% block scripts %} {% endblock %}

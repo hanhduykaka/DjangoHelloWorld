@@ -1,5 +1,5 @@
 from django import forms
-from officematter.models import Clients, ClientsInformation, Topic, Organization, OrganizationMember, Achievement, Type
+from officematter.models import Clients, ClientsInformation, Topic, Organization, OrganizationMember, Achievement, Type,School,Company,Hospital
 from django.contrib.auth.models import User
 from django.utils.text import slugify
 from django.core.exceptions import ValidationError
@@ -83,3 +83,42 @@ class OrganizationMemberForm(forms.ModelForm):
     class Meta():
         model = OrganizationMember
         fields = ('OrgId', 'ClientId')
+
+class OrganizationMemberForm(forms.ModelForm):   
+    ClientId = forms.ModelChoiceField(queryset=User.objects.all(), widget=forms.Select(attrs={'class': "form-control"}))
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)      
+        self.fields['ClientId'].widget.attrs['class'] = 'form-control'
+        self.fields['OrgId'].required = False
+    class Meta():
+        model = OrganizationMember
+        fields = ('OrgId', 'ClientId')
+
+class SchoolForm(forms.ModelForm):   
+ 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)      
+        
+        self.fields['OrgId'].required = False
+        
+    class Meta():
+        model = School
+        fields = ('Name', 'Code','OrgId','NumberTeacher','NumberStudent','NumberClass','Address')
+class HospitalForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)      
+        
+        self.fields['OrgId'].required = False
+    class Meta():
+        model = Hospital
+        fields = ('Name', 'Code','OrgId','NumberDoctor','NumberNurser','NumberStaff','NumberPatientInMonth','Address')
+
+class CompanyForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)      
+        
+        self.fields['OrgId'].required = False
+    class Meta():
+        model = Company
+        fields = ('Name', 'Code','OrgId','Budget','Revenue','NumberStaff','Address')

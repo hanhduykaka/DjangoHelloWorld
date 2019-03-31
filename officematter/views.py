@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from officematter.models import Topic, WebPage, Organization, Type ,OrganizationMember
-from officematter.form import FormRegister, UserForm, UserProfileInfoForm, TopicsForm, OrganizationForm,OrganizationMemberForm
+from officematter.models import Topic, WebPage, Organization, Type ,OrganizationMember,School,Hospital,Company
+from officematter.form import FormRegister, UserForm, UserProfileInfoForm, TopicsForm, OrganizationForm,OrganizationMemberForm,SchoolForm,HospitalForm,CompanyForm
 from officematter.models import Clients, User
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
@@ -14,6 +14,7 @@ from rest_framework.parsers import JSONParser
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_list_or_404, get_object_or_404
 from django.db.models import Q
+from django.urls import reverse
 # Create your views here.
 
 
@@ -237,8 +238,16 @@ def org_create_view(request):
             else:
                 org.Manager = request.user 
             org.save()
-            print("đã insert dư liệu")
-            return HttpResponseRedirect('/organization-list')
+            pk = org.pk
+            if org.Type.pk==1:  
+                return HttpResponseRedirect('/school-create/%s/' % pk)              
+                # url = reverse('school-create', kwargs={'pk': pk})                
+            elif org.Type.pk==2: 
+                return HttpResponseRedirect('/hospital-create/%s/' % pk)                 
+                # url = reverse('hospital-create', kwargs={'pk': pk})
+            else:
+                return HttpResponseRedirect('/company-create/%s/' % pk) 
+                # url = reverse('company-create', kwargs={'pk': pk})
         else:
             return render(request, "officematter/org_create.html", {'form_org': form_org})
     else:
@@ -271,7 +280,12 @@ def org_detail_edit(request, pk=None, template_name="officematter/org_create.htm
     if request.method == "POST":
         form = OrganizationForm(request.POST or None,request.FILES or None, instance=org)
         if form.is_valid():
-            form.save()
+            org = form.save(commit=False)
+            if request.user.is_superuser:
+                org.Manager =org.Manager
+            else:
+                org.Manager = request.user 
+            org.save()            
             return HttpResponseRedirect('/organization-list')
         else:
             return render(request, template_name, {'form_org': form})
@@ -303,5 +317,83 @@ def org_add_member(request, pk, template_name='officematter/org_add_member.html'
     else:
         form = OrganizationMemberForm()     
         return render(request, template_name, {'form_org': form})
+
+
+@login_required(login_url='/login')
+def school_create_view(request,pk):
+    org= get_object_or_404(Organization, pk=pk)  
+    if request.method == 'POST':             
+        form = SchoolForm(request.POST)            
+        if form.is_valid():
+            request.POST._mutable = True            
+            form_save = form.save(commit=False)           
+            form_save.OrgId = org
+            form_save.save()
+            id= form_save.pk
+            return HttpResponseRedirect('/school-message/%s/' % id)  
+        else:
+            return render(request, "officematter/school_create.html", {'form': form})
+    else:
+        form = SchoolForm()
+        return render(request, "officematter/school_create.html", {'form': form})
+
+@login_required(login_url='/login')
+def hospital_create_view(request,pk):
+    org= get_object_or_404(Organization, pk=pk)  
+    if request.method == 'POST':             
+        form = HospitalForm(request.POST)            
+        if form.is_valid():
+            request.POST._mutable = True            
+            form_save = form.save(commit=False)           
+            form_save.OrgId = org 
+            form_save.save()            
+            id= form_save.pk
+            return HttpResponseRedirect('/hospital-message/%s/' % id)  
+        else:
+            return render(request, "officematter/hospital_create.html", {'form': form})
+    else:
+        form = HospitalForm()
+        return render(request, "officematter/hospital_create.html", {'form': form})
+
+@login_required(login_url='/login')
+def company_create_view(request,pk):
+    org= get_object_or_404(Organization, pk=pk)  
+    if request.method == 'POST':             
+        form = CompanyForm(request.POST)            
+        if form.is_valid():
+            request.POST._mutable = True            
+            form_save = form.save(commit=False)           
+            form_save.OrgId = org 
+            form_save.save()           
+            id= form_save.pk
+            return HttpResponseRedirect('/company-message/%s/' % id)  
+        else:
+            return render(request, "officematter/company_create.html", {'form': form})
+    else:
+        form = CompanyForm()
+        return render(request, "officematter/company_create.html", {'form': form})
+
+
+@login_required(login_url='/login')       
+def org_message_school(request, pk, template_name='officematter/org_message_school.html'):
+    org= get_object_or_404(School, pk=pk)    
+    if request.method=='POST':       
+        return HttpResponseRedirect('/')
+    return render(request, template_name, {'object':org})
+
+@login_required(login_url='/login')       
+def org_message_company(request, pk, template_name='officematter/org_message_company.html'):
+    org= get_object_or_404(Company, pk=pk)    
+    if request.method=='POST':       
+        return HttpResponseRedirect('/')
+    return render(request, template_name, {'object':org})
+
+@login_required(login_url='/login')       
+def org_message_hospital(request, pk, template_name='officematter/org_message_hospital.html'):
+    org= get_object_or_404(Hospital, pk=pk)    
+    if request.method=='POST':       
+        return HttpResponseRedirect('/')
+    return render(request, template_name, {'object':org})
+
 
 

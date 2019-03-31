@@ -75,9 +75,51 @@ class Organization(models.Model):
     class Meta:
         db_table = u'Organization'
 
+
+class School(models.Model):  
+    Name = models.CharField(max_length=200)
+    Code = models.CharField(max_length=200,unique=True)
+    OrgId = models.ForeignKey(Organization, on_delete=models.PROTECT) 
+    NumberTeacher=models.IntegerField()
+    NumberStudent=models.IntegerField()
+    NumberClass=models.IntegerField()
+    Address =models.CharField(max_length=200)
+    def __str__(self):
+        return self.Name
+    class Meta:
+        db_table = u'School'
+
+class Hospital(models.Model):  
+    Name = models.CharField(max_length=200)
+    Code = models.CharField(max_length=200,unique=True)
+    OrgId = models.ForeignKey(Organization, on_delete=models.PROTECT) 
+    NumberDoctor=models.IntegerField()
+    NumberNurser=models.IntegerField()
+    NumberStaff=models.IntegerField()
+    NumberPatientInMonth=models.IntegerField()
+    Address =models.CharField(max_length=200)
+    def __str__(self):
+        return self.Name
+    class Meta:
+        db_table = u'Hospital'
+    
+class Company(models.Model):  
+    Name = models.CharField(max_length=200)
+    Code = models.CharField(max_length=200,unique=True)
+    OrgId = models.ForeignKey(Organization, on_delete=models.PROTECT)    
+    NumberStaff=models.IntegerField()
+    Budget=models.IntegerField()
+    Revenue=models.IntegerField()
+    Address =models.CharField(max_length=200)
+    def __str__(self):
+        return self.Name
+    class Meta:
+        db_table = u'Company'
+
 class OrganizationMember(models.Model):    
     ClientId = models.ForeignKey(User, on_delete=models.PROTECT)
-    OrgId = models.ForeignKey(Organization, on_delete=models.PROTECT)   
+    OrgId = models.ForeignKey(Organization, on_delete=models.PROTECT)
+       
 
     class Meta:
         db_table = u'OrganizationMember'

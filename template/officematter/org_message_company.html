@@ -1,0 +1,13 @@
+{% extends 'layout.html' %} {% load static %} {% block title%} Organization Message {%endblock%} {% block body%}
+
+
+<div class="container org-form">
+
+    <h2><a href="{% url 'office-master:organization-list' %}"> Go to Organization List</a>: Thank for you information</h2>
+
+    <form method="post">{% csrf_token %} We will contact you soon. See <strong>"{{ object }}"</strong> soon!<br/>
+        <a href="{% url 'office-master:index' %}">Go to HomePage</a>
+    </form>
+
+</div>
+{% endblock %}

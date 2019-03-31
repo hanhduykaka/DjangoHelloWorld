@@ -27,4 +27,10 @@ urlpatterns = [
     path('organization-detail/<int:pk>', views.org_detail_view, name='organization-detail'),
     path('organization-delete/<int:pk>', views.org_delete, name='organization-delete'),
     path('organization-add-member/<int:pk>', views.org_add_member, name='organization-add-member'),
+    path('company-create/<int:pk>/', views.company_create_view, name='company-create'),
+    path('school-create/<int:pk>/', views.school_create_view, name='school-create'),
+    path('hospital-create/<int:pk>/', views.hospital_create_view, name='hospital-create'),
+    path('hospital-message/<int:pk>/', views.org_message_hospital, name='hospital-message'),
+    path('company-message/<int:pk>/', views.org_message_company, name='company-message'),
+    path('school-message/<int:pk>/', views.org_message_school, name='school-message'),
 ]
