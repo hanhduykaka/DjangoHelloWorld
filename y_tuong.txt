@@ -15,3 +15,7 @@ Giáo viên chấm điểm đạt hay không đạt theo ngày
 
 Thống kê: Số sinh viên đạt, không đạt
 
+==> sau đó ý tưởng này bị dập tắt
+
+=> cuối cùng chỉ làm chức năng đăng ký người dùng, đăng lý loại tổ chức , sau đó craw thông tin lại và hiên hệ sau
+
